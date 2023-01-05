@@ -18,7 +18,7 @@
  */
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
-import { prisma } from "../db";
+import { prisma } from "../prisma";
 
 type CreateContextOptions = Record<string, never>;
 

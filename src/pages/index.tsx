@@ -7,31 +7,51 @@ import {
   Geographies,
   Geography,
   Sphere,
-  Graticule
+  Graticule,
 } from "react-simple-maps";
 
 const geoUrl = "/features.json";
 
+// load in map
+const iso3ToRegionObjs = require("../data/iso3_to_region.json");
+const iso3ToRegion = new Map(
+  iso3ToRegionObjs.map((x: any) => [x["code"], x["region"]])
+);
+
 const colorScale = scaleLinear([0, 1], ["white", "red"]);
 
-const Home: NextPage = () =>  {
+export type CountrySentimentScore = {
+  score: number;
+  region: string;
+};
 
-  const mockData = {
+const start = new Date();
+const end = new Date();
+
+const Home: NextPage = () => {
+  const mockData: CountrySentimentScore = {
     score: 0.1,
-    ISO3:"AFG",
-    Name:"Afghanistan",
-  }
-  const [data, setData] = useState([mockData]);
+    region: "South America",
+  };
+  const [data, setData] = useState<CountrySentimentScore[]>([]);
 
-  // useEffect(() => {
+  const x = api.news.all.useQuery({
+    to_date: start,
+    from_date: end,
+  });
+  console.log("HOELELEO", x.data);
 
-  //   setData([{ISO3:"AFG", 2017:"0.62661390602871"}]), []);
+  useEffect(() => {
+    // const data = api.news.getAll.useQuery()
+    // console.log(data)
+    setData([mockData]);
+  }, []);
 
   return (
     <ComposableMap
       projectionConfig={{
         rotate: [-10, 0, 0],
-        scale: 147
+        scale: 147,
       }}
     >
       <Sphere id="1" fill="white" stroke="#E4E5E6" strokeWidth={0.5} />
@@ -40,7 +60,9 @@ const Home: NextPage = () =>  {
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
             geographies.map((geo) => {
-              const d = data.find((s:any) => s.ISO3 === geo.id);
+              const d = data.find(
+                (s: any) => s.region === iso3ToRegion.get(geo.id)
+              );
               return (
                 <Geography
                   key={geo.rsmKey}
@@ -55,6 +77,5 @@ const Home: NextPage = () =>  {
     </ComposableMap>
   );
 };
-
 
 export default Home;

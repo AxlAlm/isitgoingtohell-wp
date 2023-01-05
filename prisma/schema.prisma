@@ -8,11 +8,11 @@ datasource db {
 }
 
 model news {
-  id         Int     @id @default(autoincrement())
-  headline   String? @unique
-  date       String?
-  region     String?
-  scraped_at String?
-  label      String?
-  score      Float?
+  id         Int      @default(autoincrement())
+  headline   String   @unique
+  date       DateTime @db.Date
+  region     String
+  scraped_at DateTime @db.Date
+  label      String
+  score      Float
 }
