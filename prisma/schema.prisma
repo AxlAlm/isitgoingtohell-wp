@@ -10,9 +10,9 @@ datasource db {
 model news {
   id         Int      @default(autoincrement())
   headline   String   @unique
-  date       DateTime @db.Date
+  date       DateTime @db.Timestamp(6)
   region     String
-  scraped_at DateTime @db.Date
+  scraped_at DateTime @db.Timestamp(6)
   label      String
   score      Float
 }
