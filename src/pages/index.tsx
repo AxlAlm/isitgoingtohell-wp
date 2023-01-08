@@ -16,7 +16,13 @@ import dayjs, { Dayjs } from "dayjs";
 import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-const iso3ToRegionObjs = require("../data/iso3_to_region.json");
+// import iso3ToRegionObjs = require("../data/iso3_to_region.json");
+
+import iso3ToRegionObjs from "../data/iso3_to_region.json";
+
+// import foo = require('foo');
+// require('foo');
+// import foo from 'foo';
 
 const geoUrl = "/features.json";
 
@@ -75,12 +81,7 @@ const Home: NextPage = () => {
       bgcolor="#ff71ce"
     >
       <div className="my-div"> Is it Going to hell?</div>
-      <Box
-        display="flex"
-        alignItems="center"
-        flexDirection="row"
-        sx={{ p: 2, border: "1px dashed grey" }}
-      >
+      <Box display="flex" alignItems="center" flexDirection="row">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             InputProps={{
@@ -123,12 +124,16 @@ const Home: NextPage = () => {
           />
         </LocalizationProvider>
       </Box>
-      <Box sx={{ width: 1000, p: 2, border: "1px dashed grey" }}>
+      <Box sx={{ width: 1000 }}>
         <div style={{ pointerEvents: "none" }}>
           <ComposableMap
             projectionConfig={{
               rotate: [-10, 0, 0],
               scale: 140,
+            }}
+            style={{
+              position: "relative",
+              transform: "translate(-0px, -120px)",
             }}
           >
             <Sphere id="1" fill="#b967ff" stroke="#05ffa1" strokeWidth={0.7} />
