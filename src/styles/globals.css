@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "VCR_OSD_MONO";
+  src: url("fonts/VCR_OSD_MONO.ttf");
+}
+
+.my-div {
+  font-family: "VCR_OSD_MONO";
+  font-size: 120px;
+  color: aqua;
+}
