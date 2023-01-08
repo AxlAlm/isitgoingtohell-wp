@@ -80,7 +80,7 @@ const Home: NextPage = () => {
       minHeight="120vh"
       bgcolor="#ff71ce"
     >
-      <div className="my-div"> Is it Going to hell?</div>
+      <div className="cool-title"> Is it Going to Hell?</div>
       <Box display="flex" alignItems="center" flexDirection="row">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
