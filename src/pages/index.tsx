@@ -17,6 +17,7 @@ import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import iso3ToRegionObjs from "../data/iso3_to_region.json";
+import MusicPlayer from "../components/MusicPlayer";
 
 const geoUrl = "/features.json";
 
@@ -26,26 +27,6 @@ const iso3ToRegion: Map<string, string> = new Map(
 );
 
 const colorScale = scaleLinear([0, 1], ["white", "red"]);
-
-type MusicPlayerProps = {
-  url: string;
-};
-
-const MusicPlayer = (props: MusicPlayerProps) => {
-  const audioElement = useRef<HTMLAudioElement>(null);
-
-  useEffect(() => {
-    if (audioElement.current) {
-      audioElement.current.play();
-    }
-  }, []);
-
-  return (
-    <div>
-      <audio ref={audioElement} src={props.url} />
-    </div>
-  );
-};
 
 const Home: NextPage = () => {
   const song =
@@ -82,96 +63,104 @@ const Home: NextPage = () => {
   }, [data, startMonth, endMonth]);
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      flexDirection="column"
-      justifyContent="center"
-      minHeight="120vh"
-      bgcolor="#ff71ce"
-    >
-      <div className="cool-title"> Is it Going to Hell?</div>
-      <Box display="flex" alignItems="center" flexDirection="row">
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            InputProps={{
-              style: {
-                fontFamily: "VCR_OSD_MONO",
-                fontWeight: "bold",
-                color: "#fffb96",
-              },
-            }}
-            PopperProps={{
-              style: {
-                fontFamily: "VCR_OSD_MONO",
-              },
-            }}
-            views={["year", "month"]}
-            minDate={min}
-            maxDate={max}
-            value={startMonth}
-            onChange={handleStartMonthChange}
-            renderInput={(params) => (
-              <TextField {...params} helperText={null} />
-            )}
-          />
-          <DatePicker
-            InputProps={{
-              style: {
-                fontFamily: "VCR_OSD_MONO",
-                fontWeight: "bold",
-                color: "#fffb96",
-              },
-            }}
-            views={["year", "month"]}
-            minDate={min}
-            maxDate={max}
-            value={endMonth}
-            onChange={handleEndMonthChange}
-            renderInput={(params) => (
-              <TextField {...params} helperText={null} />
-            )}
-          />
-        </LocalizationProvider>
+    <Box bgcolor="#ff71ce">
+      <Box alignItems="left">
+        <MusicPlayer url={song} />
       </Box>
-      <Box sx={{ width: 1000 }}>
-        <div style={{ pointerEvents: "none" }}>
-          <ComposableMap
-            projectionConfig={{
-              rotate: [-10, 0, 0],
-              scale: 140,
-            }}
-            style={{
-              position: "relative",
-              transform: "translate(-0px, -120px)",
-            }}
-          >
-            <Sphere id="1" fill="#b967ff" stroke="#05ffa1" strokeWidth={0.7} />
-            <Graticule stroke="#05ffa1" strokeWidth={0.7} />
-            {(data || []).length > 0 && (
-              <Geographies geography={geoUrl}>
-                {({ geographies }) =>
-                  geographies.map((geo) => {
-                    const d = data.find(
-                      (x) =>
-                        x.region ===
-                        (iso3ToRegion.get(geo.id) || "").toLowerCase()
-                    );
-                    return (
-                      <Geography
-                        key={geo.rsmKey}
-                        geography={geo}
-                        fill={d ? colorScale(d.score) : "#F5F4F6"}
-                      />
-                    );
-                  })
-                }
-              </Geographies>
-            )}
-          </ComposableMap>{" "}
-        </div>
+      <Box
+        display="flex"
+        alignItems="center"
+        flexDirection="column"
+        justifyContent="center"
+        minHeight="120vh"
+      >
+        <div className="cool-title"> Is it Going to Hell?</div>
+        <Box display="flex" alignItems="center" flexDirection="row">
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              InputProps={{
+                style: {
+                  fontFamily: "VCR_OSD_MONO",
+                  fontWeight: "bold",
+                  color: "#fffb96",
+                },
+              }}
+              PopperProps={{
+                style: {
+                  fontFamily: "VCR_OSD_MONO",
+                },
+              }}
+              views={["year", "month"]}
+              minDate={min}
+              maxDate={max}
+              value={startMonth}
+              onChange={handleStartMonthChange}
+              renderInput={(params) => (
+                <TextField {...params} helperText={null} />
+              )}
+            />
+            <DatePicker
+              InputProps={{
+                style: {
+                  fontFamily: "VCR_OSD_MONO",
+                  fontWeight: "bold",
+                  color: "#fffb96",
+                },
+              }}
+              views={["year", "month"]}
+              minDate={min}
+              maxDate={max}
+              value={endMonth}
+              onChange={handleEndMonthChange}
+              renderInput={(params) => (
+                <TextField {...params} helperText={null} />
+              )}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Box sx={{ width: 1000 }}>
+          <div style={{ pointerEvents: "none" }}>
+            <ComposableMap
+              projectionConfig={{
+                rotate: [-10, 0, 0],
+                scale: 140,
+              }}
+              style={{
+                position: "relative",
+                transform: "translate(-0px, -120px)",
+              }}
+            >
+              <Sphere
+                id="1"
+                fill="#b967ff"
+                stroke="#05ffa1"
+                strokeWidth={0.7}
+              />
+              <Graticule stroke="#05ffa1" strokeWidth={0.7} />
+              {(data || []).length > 0 && (
+                <Geographies geography={geoUrl}>
+                  {({ geographies }) =>
+                    geographies.map((geo) => {
+                      const d = data.find(
+                        (x) =>
+                          x.region ===
+                          (iso3ToRegion.get(geo.id) || "").toLowerCase()
+                      );
+                      return (
+                        <Geography
+                          key={geo.rsmKey}
+                          geography={geo}
+                          fill={d ? colorScale(d.score) : "#F5F4F6"}
+                        />
+                      );
+                    })
+                  }
+                </Geographies>
+              )}
+            </ComposableMap>{" "}
+          </div>
+        </Box>
       </Box>
-      <MusicPlayer url={song} />
     </Box>
   );
 };
