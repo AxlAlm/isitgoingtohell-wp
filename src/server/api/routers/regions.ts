@@ -34,7 +34,7 @@ export const regionsRouter = createTRPCRouter({
 
       const regionsScores: Region[] = [];
       for (const region of regions) {
-        let labelCounts = new Map(
+        const labelCounts = new Map(
           regionsLabelCounts
             .filter((x) => x.region === region)
             .map((x) => [x.label, x._count.label])
@@ -49,7 +49,6 @@ export const regionsRouter = createTRPCRouter({
 
         regionsScores.push(regionScore);
       }
-      console.log(regionsScores);
       return regionsScores;
     }),
 });

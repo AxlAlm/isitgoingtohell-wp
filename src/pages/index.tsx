@@ -11,17 +11,16 @@ import {
 } from "react-simple-maps";
 import Box from "@mui/material/Box";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
 import { Region } from "../server/api/routers/regions";
 import dayjs, { Dayjs } from "dayjs";
 import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+const iso3ToRegionObjs = require("../data/iso3_to_region.json");
 
 const geoUrl = "/features.json";
 
 // load in map
-const iso3ToRegionObjs = require("../data/iso3_to_region.json");
 const iso3ToRegion: Map<string, string> = new Map(
   iso3ToRegionObjs.map((x: any) => [x["code"], x["region"]])
 );
