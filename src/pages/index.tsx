@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import { api } from "../utils/api";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { scaleLinear } from "d3-scale";
 import {
   ComposableMap,
@@ -16,13 +16,7 @@ import dayjs, { Dayjs } from "dayjs";
 import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import iso3ToRegionObjs = require("../data/iso3_to_region.json");
-
 import iso3ToRegionObjs from "../data/iso3_to_region.json";
-
-// import foo = require('foo');
-// require('foo');
-// import foo from 'foo';
 
 const geoUrl = "/features.json";
 
@@ -33,13 +27,29 @@ const iso3ToRegion: Map<string, string> = new Map(
 
 const colorScale = scaleLinear([0, 1], ["white", "red"]);
 
-// const useStyles = makeStyles({
-//   paper: {
-//     fontFamily: "VCR_OSD_MONO",
-//   },
-// });
+type MusicPlayerProps = {
+  url: string;
+};
+
+const MusicPlayer = (props: MusicPlayerProps) => {
+  const audioElement = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    if (audioElement.current) {
+      audioElement.current.play();
+    }
+  }, []);
+
+  return (
+    <div>
+      <audio ref={audioElement} src={props.url} />
+    </div>
+  );
+};
 
 const Home: NextPage = () => {
+  const song =
+    "https://static1.squarespace.com/static/57e83f709de4bbd550a2fdba/58e6e631579fb3bb25ed2822/6323fd85ebe8f81bc36cd975/1663303114116/Eternal+Light.mp3";
   const min = dayjs("2020-01-01");
   const max = dayjs().add(1, "month");
 
@@ -161,6 +171,7 @@ const Home: NextPage = () => {
           </ComposableMap>{" "}
         </div>
       </Box>
+      <MusicPlayer url={song} />
     </Box>
   );
 };
