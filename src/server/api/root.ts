@@ -1,5 +1,5 @@
 import { createTRPCRouter } from "./trpc";
-import { regionsRouter } from "./routers/regions";
+import { newsRouter } from "./routers/news";
 
 /**
  * This is the primary router for your server.
@@ -7,7 +7,7 @@ import { regionsRouter } from "./routers/regions";
  * All routers added in /api/routers should be manually added here
  */
 export const appRouter = createTRPCRouter({
-  regions: regionsRouter,
+  news: newsRouter,
 });
 
 // export type definition of API

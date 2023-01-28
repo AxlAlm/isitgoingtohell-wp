@@ -1,15 +1,14 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
-// import { prisma } from "../prisma";
 
-export type Region = {
+export type RegionSentiment = {
   region: string;
   score: number;
 };
 
-export const regionsRouter = createTRPCRouter({
-  all: publicProcedure
+export const newsRouter = createTRPCRouter({
+  sentimentPerRegion: publicProcedure
     .input(
       z.object({
         to_date: z.date(),
@@ -30,9 +29,13 @@ export const regionsRouter = createTRPCRouter({
         },
       });
 
+      console.log(input.from_date);
+      console.log(input.to_date);
+      console.log(regionsLabelCounts);
+
       const regions = new Set(regionsLabelCounts.map((x) => x.region));
 
-      const regionsScores: Region[] = [];
+      const regionsScores: RegionSentiment[] = [];
       for (const region of regions) {
         const labelCounts = new Map(
           regionsLabelCounts
@@ -40,7 +43,7 @@ export const regionsRouter = createTRPCRouter({
             .map((x) => [x.label, x._count.label])
         );
 
-        const regionScore: Region = {
+        const regionScore: RegionSentiment = {
           region: region,
           score:
             (labelCounts.get("NEG") || 0) /
@@ -49,6 +52,8 @@ export const regionsRouter = createTRPCRouter({
 
         regionsScores.push(regionScore);
       }
+
+      console.log(regionsScores);
       return regionsScores;
     }),
 });
